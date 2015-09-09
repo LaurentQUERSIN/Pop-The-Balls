@@ -66,7 +66,7 @@ namespace Pop_The_Balls
 
         private Task onConnecting(IScenePeerClient client)
         {
-            _scene.GetComponent<ILogger>().Debug("main", "un client tente de se connecter");
+            _scene.GetComponent<ILogger>().Debug("main", "A new client attemps to connect");
             if (_isRunning == false)
                 throw new ClientException("le serveur est vérouillé.");
             else if (_players.Count >= 100)
@@ -76,6 +76,7 @@ namespace Pop_The_Balls
 
         private Task onConnected(IScenePeerClient client)
         {
+            _scene.GetComponent<ILogger>().Debug("main", "new client connecting");
             Player player = new Player(client.GetUserData<string>());
             if (_players.Count < 100)
             {
