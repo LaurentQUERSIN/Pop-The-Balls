@@ -159,8 +159,8 @@ namespace Pop_The_Balls
                     lastUpdate = _env.Clock;
                     Random rand = new Random();
                     float x = (float)((rand.NextDouble() - 0.5) * 24);
-                    float vx = (float)((rand.NextDouble() - 0.5) * 12);
-                    Ball newBall = new Ball(_ids, _env.Clock, x, 6f, vx, -2f);
+                    float vx = (float)((rand.NextDouble() - 0.5) * 1200);
+                    Ball newBall = new Ball(_ids, _env.Clock, x, 6f, vx , -200f);
                     _scene.Broadcast("create_ball", s =>
                     {
                         var writer = new BinaryWriter(s, Encoding.UTF8, false);
@@ -168,7 +168,7 @@ namespace Pop_The_Balls
                         writer.Write(x);
                         writer.Write(6f);
                         writer.Write(vx);
-                        writer.Write(-2f);
+                        writer.Write(-200f);
                     }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                     _balls.TryAdd(_ids, newBall);
                     _ids++;
