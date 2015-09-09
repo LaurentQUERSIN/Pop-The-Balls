@@ -177,8 +177,10 @@ namespace Pop_The_Balls
                             _balls.TryRemove(ball.id, out temp);
                         } }
                     if (_ids >= 2000000)
+                    {
                         _ids = 0;
-                    _scene.GetComponent<ILogger>().Debug("main", "reseting Ids to avoid overflow");
+                        _scene.GetComponent<ILogger>().Debug("main", "reseting Ids to avoid overflow");
+                    }
                 }
             }
         }
