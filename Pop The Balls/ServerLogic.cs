@@ -122,7 +122,7 @@ namespace Pop_The_Balls
                         break;
                     }
                 }
-                if (touched == true)
+                if (touched == false)
                     ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(0); });
 
             }
