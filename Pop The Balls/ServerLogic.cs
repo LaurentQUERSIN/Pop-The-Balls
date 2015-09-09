@@ -157,7 +157,6 @@ namespace Pop_The_Balls
                     float x = (float)((rand.NextDouble() - 0.5) * 24);
                     float vx = (float)((rand.NextDouble() - 0.5) * 12);
                     Ball newBall = new Ball(_ids, _env.Clock, x, 6f, vx, -2f);
-                    _scene.GetComponent<ILogger>().Debug("main", "creating new ball.");
                     _scene.Broadcast("create_ball", s =>
                     {
                         var writer = new BinaryWriter(s, Encoding.UTF8, false);
