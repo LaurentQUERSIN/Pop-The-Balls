@@ -179,6 +179,7 @@ namespace Pop_The_Balls
                     if (_ids >= 2000000)
                     {
                         _ids = 0;
+
                         //_scene.GetComponent<ILogger>().Debug("main", "reseting Ids to avoid overflow");
                     }
                 }
