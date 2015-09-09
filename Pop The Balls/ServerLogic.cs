@@ -102,8 +102,8 @@ namespace Pop_The_Balls
         private Task onClick(RequestContext<IScenePeerClient> ctx)
         {
             if (_players.ContainsKey(ctx.RemotePeer.Id))
-            {
-                var reader = new BinaryReader(ctx.ReadObject<Stream>());
+            { 
+                var reader = new BinaryReader(ctx.InputStream);
                 float x = reader.ReadSingle();
                 float y = reader.ReadSingle();
                 long timestamp = reader.ReadInt32();
