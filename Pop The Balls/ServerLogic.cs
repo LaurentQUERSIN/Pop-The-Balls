@@ -151,12 +151,13 @@ namespace Pop_The_Balls
             long lastUpdate = _env.Clock;
             while (_isRunning == true)
             {
-                if (lastUpdate + 100 > _env.Clock)
+                if (lastUpdate + 100 < _env.Clock)
                 {
                     Random rand = new Random();
                     float x = (float)((rand.NextDouble() - 0.5) * 24);
                     float vx = (float)((rand.NextDouble() - 0.5) * 12);
                     Ball newBall = new Ball(_ids, _env.Clock, x, 6f, vx, -2f);
+                    _scene.GetComponent<ILogger>().Debug("main", "creating new ball.");
                     _scene.Broadcast("create_ball", s =>
                     {
                         var writer = new BinaryWriter(s, Encoding.UTF8, false);
@@ -167,15 +168,17 @@ namespace Pop_The_Balls
                     }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                     _balls.TryAdd(_ids, newBall);
                     _ids++;
-                }
-                foreach (Ball ball in _balls.Values)
-                {
-                    Ball temp;
-                    if (ball.creationTime + 5000 > _env.Clock)
+                    foreach (Ball ball in _balls.Values)
                     {
-                        _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
-                        _balls.TryRemove(ball.id, out temp);
-                    }
+                        Ball temp;
+                        if (ball.creationTime + 5000 > _env.Clock)
+                        {
+                            _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
+                            _balls.TryRemove(ball.id, out temp);
+                        } }
+                    if (_ids >= 2000000)
+                        _ids = 0;
+                    _scene.GetComponent<ILogger>().Debug("main", "reseting Ids to avoid overflow");
                 }
             }
         }
