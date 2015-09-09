@@ -118,6 +118,8 @@ namespace Pop_The_Balls
                         _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
                         _balls.TryRemove(ball.id, out temp);
                     }
+                    else
+                        ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1); });
                 }
             }
             return Task.FromResult(true);
