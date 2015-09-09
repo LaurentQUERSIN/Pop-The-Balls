@@ -11,6 +11,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Pop_The_Balls
 {
@@ -149,6 +150,7 @@ namespace Pop_The_Balls
         {
             _isRunning = true;
             long lastUpdate = _env.Clock;
+            
             while (_isRunning == true)
             {
                 if (lastUpdate + 100 < _env.Clock)
@@ -161,6 +163,7 @@ namespace Pop_The_Balls
                     _scene.Broadcast("create_ball", s =>
                     {
                         var writer = new BinaryWriter(s, Encoding.UTF8, false);
+                        writer.Write(_ids);
                         writer.Write(x);
                         writer.Write(6f);
                         writer.Write(vx);
