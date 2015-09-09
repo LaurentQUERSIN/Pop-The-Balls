@@ -151,8 +151,9 @@ namespace Pop_The_Balls
             long lastUpdate = _env.Clock;
             while (_isRunning == true)
             {
-                if (lastUpdate + 100 > _env.Clock)
+                if (lastUpdate + 100 < _env.Clock)
                 {
+                    lastUpdate = _env.Clock;
                     Random rand = new Random();
                     float x = (float)((rand.NextDouble() - 0.5) * 24);
                     float vx = (float)((rand.NextDouble() - 0.5) * 12);
