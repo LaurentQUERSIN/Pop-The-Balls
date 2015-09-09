@@ -102,7 +102,8 @@ namespace Pop_The_Balls
         private Task onClick(RequestContext<IScenePeerClient> ctx)
         {
             if (_players.ContainsKey(ctx.RemotePeer.Id))
-            { 
+            {
+                bool touched = false;
                 var reader = new BinaryReader(ctx.InputStream);
                 float x = reader.ReadSingle();
                 float y = reader.ReadSingle();
@@ -117,10 +118,13 @@ namespace Pop_The_Balls
                         ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1);});
                         _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
                         _balls.TryRemove(ball.id, out temp);
+                        touched = true;
+                        break;
                     }
-                    else
-                        ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1); });
                 }
+                if (touched == true)
+                    ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(0); });
+
             }
             return Task.FromResult(true);
         }
