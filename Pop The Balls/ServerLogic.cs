@@ -175,11 +175,12 @@ namespace Pop_The_Balls
                     foreach (Ball ball in _balls.Values)
                     {
                         Ball temp;
-                        if (ball.creationTime + 5000 > _env.Clock)
+                        if (ball.creationTime + 15000 > _env.Clock)
                         {
                             _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
                             _balls.TryRemove(ball.id, out temp);
-                        } }
+                        }
+                    }
                     if (_ids >= 2000000)
                     {
                         _ids = 0;
