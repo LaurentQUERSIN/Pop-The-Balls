@@ -113,6 +113,7 @@ namespace Pop_The_Balls
                     Ball temp;
                     if (ball.IsClicked(x, y, timestamp))
                     {
+                        _players[ctx.RemotePeer.Id].score++;
                         ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1);});
                         _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
                         _balls.TryRemove(ball.id, out temp);
@@ -159,8 +160,8 @@ namespace Pop_The_Balls
                     lastUpdate = _env.Clock;
                     Random rand = new Random();
                     float x = (float)((rand.NextDouble() - 0.5) * 16f);
-                    float vx = (float)((rand.NextDouble() - 0.5) * 600f);
-                    Ball newBall = new Ball(_ids, _env.Clock, x, 6f, vx , -200f);
+                    float vx = (float)((rand.NextDouble() - 0.5) * 6f);
+                    Ball newBall = new Ball(_ids, _env.Clock, x, 6f, vx , -2f);
                     _scene.Broadcast("create_ball", s =>
                     {
                         var writer = new BinaryWriter(s, Encoding.UTF8, false);
@@ -168,7 +169,7 @@ namespace Pop_The_Balls
                         writer.Write(x);
                         writer.Write(6f);
                         writer.Write(vx);
-                        writer.Write(-200f);
+                        writer.Write(-2f);
                     }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                     _balls.TryAdd(_ids, newBall);
                     _ids++;
