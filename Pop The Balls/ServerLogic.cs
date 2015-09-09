@@ -158,7 +158,7 @@ namespace Pop_The_Balls
                 {
                     lastUpdate = _env.Clock;
                     Random rand = new Random();
-                    float x = (float)((rand.NextDouble() - 0.5) * 24);
+                    float x = (float)((rand.NextDouble() - 0.5) * );
                     float vx = (float)((rand.NextDouble() - 0.5) * 600);
                     Ball newBall = new Ball(_ids, _env.Clock, x, 6f, vx , -200f);
                     _scene.Broadcast("create_ball", s =>
