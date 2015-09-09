@@ -55,6 +55,7 @@ namespace Pop_The_Balls
         private Task onStarting(dynamic arg)
         {
             _scene.GetComponent<ILogger>().Debug("server", "starting game loop");
+            _isRunning = true;
             runLogic();
             return Task.FromResult(true);
         }
@@ -66,7 +67,7 @@ namespace Pop_The_Balls
 
         private Task onConnecting(IScenePeerClient client)
         {
-            _scene.GetComponent<ILogger>().Debug("main", "A new client attemps to connect");
+            _scene.GetComponent<ILogger>().Debug("main", "A new client try to connect");
             if (_isRunning == false)
                 throw new ClientException("le serveur est vérouillé.");
             else if (_players.Count >= 100)
@@ -146,6 +147,7 @@ namespace Pop_The_Balls
 
         private void runLogic()
         {
+            _isRunning = true;
             long lastUpdate = _env.Clock;
             while (_isRunning == true)
             {
