@@ -11,7 +11,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Threading;
+using System.Reactive.Concurrency;
 
 namespace Pop_The_Balls
 {
@@ -146,10 +146,11 @@ namespace Pop_The_Balls
             return Task.FromResult(true);
         }
 
-        private void runLogic()
+        private async Task runLogic()
         {
             _isRunning = true;
             long lastUpdate = _env.Clock;
+            
             
             while (_isRunning == true)
             {
@@ -185,6 +186,7 @@ namespace Pop_The_Balls
                         //_scene.GetComponent<ILogger>().Debug("main", "reseting Ids to avoid overflow");
                     }
                 }
+                await Task.Delay(100);
             }
         }
     }
