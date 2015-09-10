@@ -69,7 +69,7 @@ namespace Pop_The_Balls
             vx = (float) tx;
             vy = (float) ty;
 
-            oscillationTime = (rand.Next() % 5) * 1000;
+            oscillationTime = ((rand.Next() % 5) + 1) * 1000;
             id = nid;
             creationTime = time;
         }
