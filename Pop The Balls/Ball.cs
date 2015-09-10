@@ -32,18 +32,32 @@ namespace Pop_The_Balls
             return (false);
         }
 
-        public Ball(int nid, long time, Random rand)
+        private void RandomRingPosition(ref double x, ref double y, Random rand)
         {
-            double tx;
-            double ty;
             double length;
 
-            tx = rand.NextDouble() - 0.5f;
-            ty = rand.NextDouble() - 0.5f;
+            x = rand.NextDouble() - 0.5f;
+            y = rand.NextDouble() - 0.5f;
             length = Math.Sqrt((tx * tx) + (ty * ty));
 
-            x = (float) (tx / length) * 13;
-            y = (float)(ty / length) * 13;
+            x = x / length;
+            y = y / length;
+        }
+
+        public Ball(int nid, long time, Random rand)
+        {
+            double tx = 0;
+            double ty = 0;
+
+            RandomRingPosition(ref tx, ref ty, rand);
+
+            x = (float) (tx) * 13f;
+            y = (float) (ty) * 13f;
+
+            RandomRingPosition(ref x, ref y, rand);
+
+            vx = (float)(tx * 3f) - x;
+            vy = (float)(ty * 3f) - y;
 
             vx = -x;
             vy = -y;
