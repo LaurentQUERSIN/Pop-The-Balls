@@ -23,7 +23,7 @@ namespace Pop_The_Balls
 
         public bool IsClicked(float player_x, float player_y, long time, ISceneHost scene)
         {
-            float dist = 0.2f;
+            float dist = 0.3f;
 
             float updated_x = x + (vx * (time - creationTime) / 1000);
             float updated_y = y + (vy * (time - creationTime) / 1000);
