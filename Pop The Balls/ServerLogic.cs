@@ -34,6 +34,8 @@ namespace Pop_The_Balls
         private ConcurrentDictionary<int, Ball> _balls = new ConcurrentDictionary<int, Ball>();
         private Random _rand = new Random();
 
+        private string version = "a0.1";
+
         public main(ISceneHost scene)
         {
             _scene = scene;
@@ -70,17 +72,20 @@ namespace Pop_The_Balls
         private Task onConnecting(IScenePeerClient client)
         {
             _scene.GetComponent<ILogger>().Debug("main", "A new client try to connect");
+            ConnectionDtO player_dto = client.GetUserData<ConnectionDtO>();
             if (_isRunning == false)
                 throw new ClientException("le serveur est vérouillé.");
             else if (_players.Count >= 100)
                 throw new ClientException("le serveur est complet.");
+            else if (player_dto.version != version)
+                throw new ClientException("mauvaise version");
             return Task.FromResult(true);
         }
 
         private Task onConnected(IScenePeerClient client)
         {
             _scene.GetComponent<ILogger>().Debug("main", "new client connecting");
-            Player player = new Player(client.GetUserData<string>());
+            Player player = new Player(client.GetUserData<ConnectionDtO>().name);
             if (_players.Count < 100)
             {
                 _scene.GetComponent<ILogger>().Debug("main", "client connected with name : " + player.name);
