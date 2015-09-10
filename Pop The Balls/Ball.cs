@@ -38,7 +38,7 @@ namespace Pop_The_Balls
 
             x = rand.NextDouble() - 0.5f;
             y = rand.NextDouble() - 0.5f;
-            length = Math.Sqrt((tx * tx) + (ty * ty));
+            length = Math.Sqrt((x * x) + (y * y));
 
             x = x / length;
             y = y / length;
