@@ -16,5 +16,11 @@ namespace Pop_The_Balls
             name = nm;
             version = nv;
         }
+
+        public ConnectionDtO()
+        {
+            name = "";
+            version = "";
+        }
     }
 }
