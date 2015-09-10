@@ -112,7 +112,7 @@ namespace Pop_The_Balls
                 foreach(Ball ball in _balls.Values)
                 {
                     Ball temp;
-                    if (ball.IsClicked(x, y, timestamp))
+                    if (ball.IsClicked(x, y, timestamp, _scene))
                     {
                         _players[ctx.RemotePeer.Id].score++;
                         ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1);});
@@ -161,7 +161,7 @@ namespace Pop_The_Balls
             
             while (_isRunning == true)
             {
-                if (lastUpdate + 100 < _env.Clock)
+                if (lastUpdate + 3000 < _env.Clock)
                 {
                     lastUpdate = _env.Clock;
                     Random rand = new Random();

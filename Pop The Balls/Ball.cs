@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stormancer;
+using Stormancer.Core;
+using Stormancer.Diagnostics;
 
 namespace Pop_The_Balls
 {
@@ -16,11 +19,12 @@ namespace Pop_The_Balls
         public float vx =  0;
         public float vy = 0;
 
-        public bool IsClicked(float player_x, float player_y, long time)
+        public bool IsClicked(float player_x, float player_y, long time, ISceneHost scene)
         {
             float updated_x = x + (vx * (time - creationTime));
             float updated_y = y + (vy * (time - creationTime));
 
+            scene.GetComponent<ILogger>().Debug("main", "ball_c : " + updated_x.ToString() + " " + updated_y.ToString() + " || player : " + player_x.ToString() + " " + player_y.ToString());
             if (updated_x - 0.3f < player_x && player_x < updated_x + 0.3f && updated_y - 0.3f < player_y && player_y < updated_y + 0.3f)
                 return (true);
             return (false);
