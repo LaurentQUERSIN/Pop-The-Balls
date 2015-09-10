@@ -131,13 +131,13 @@ namespace Pop_The_Balls
                         }
                     }
                 }
-                if ( hitBall != null)
+                if (hitBall != null)
                 {
                     if (hitGoodBall)
                     {
                         _players[ctx.RemotePeer.Id].score++;
                         ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1); });
-                        _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
+                        _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(hitBall.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
                         _balls.TryRemove(hitBall.id, out temp);
                     }
                     else
@@ -155,8 +155,9 @@ namespace Pop_The_Balls
                 }
                 if (touched == false)
                     ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(0); });
-                return Task.FromResult(true);
             }
+                return Task.FromResult(true);
+        }
 
         private Task onUpdateLeaderBoard(RequestContext<IScenePeerClient> ctx)
         {
