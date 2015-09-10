@@ -120,7 +120,7 @@ namespace Pop_The_Balls
                     Ball temp;
                     if (ball.IsClicked(x, y, timestamp, _scene))
                     {
-                        if (((_env.Clock - ball.creationTime) / 5000) % 2 == 0)
+                        if (((_env.Clock - ball.creationTime) / ball.oscillationTime) % 2 == 0)
                         {
                             _players[ctx.RemotePeer.Id].score++;
                             ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1); });
@@ -195,6 +195,7 @@ namespace Pop_The_Balls
                         writer.Write(newBall.vx);
                         writer.Write(newBall.vy);
                         writer.Write(_env.Clock);
+                        writer.Write(newBall.oscillationTime);
                     }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                     _balls.TryAdd(_ids, newBall);
                     _ids++;

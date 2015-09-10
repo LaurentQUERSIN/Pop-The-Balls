@@ -13,6 +13,7 @@ namespace Pop_The_Balls
     {
         public int id;
         public long creationTime;
+        public int oscillationTime;
 
         public float x = 0;
         public float y = 0;
@@ -55,20 +56,20 @@ namespace Pop_The_Balls
             double tx = 0;
             double ty = 0;
 
+            //randomizing spawn position
             RandomRingPosition(ref tx, ref ty, rand);
-
             x = (float) (tx) * 13f;
             y = (float) (ty) * 13f;
 
+            //randomizing trajectory
             RandomRingPosition(ref tx, ref ty, rand);
-
             tx = (tx * 3f) - x;
             ty = (ty * 3f) - y;
             Normalize(ref tx, ref ty);
-
             vx = (float) tx;
             vy = (float) ty;
 
+            oscillationTime = (rand.Next() % 5) * 1000;
             id = nid;
             creationTime = time;
         }
