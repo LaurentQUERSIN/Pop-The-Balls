@@ -19,6 +19,7 @@ namespace Pop_The_Balls
         public float vx =  0;
         public float vy = 0;
 
+
         public bool IsClicked(float player_x, float player_y, long time, ISceneHost scene)
         {
             float dist = 0.5f;

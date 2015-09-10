@@ -34,7 +34,7 @@ namespace Pop_The_Balls
         private ConcurrentDictionary<int, Ball> _balls = new ConcurrentDictionary<int, Ball>();
         private Random _rand = new Random();
 
-        private string version = "a0.1";
+        private string version = "a0.2";
 
         public main(ISceneHost scene)
         {
@@ -120,12 +120,29 @@ namespace Pop_The_Balls
                     Ball temp;
                     if (ball.IsClicked(x, y, timestamp, _scene))
                     {
-                        _players[ctx.RemotePeer.Id].score++;
-                        ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1);});
-                        _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
-                        _balls.TryRemove(ball.id, out temp);
-                        touched = true;
-                        break;
+                        if (((_env.Clock - ball.creationTime) / 5000) % 2 == 0)
+                        {
+                            _players[ctx.RemotePeer.Id].score++;
+                            ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1); });
+                            _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
+                            _balls.TryRemove(ball.id, out temp);
+                            touched = true;
+                            break;
+                        }
+                        else
+                        {
+                            _players[ctx.RemotePeer.Id].life--;
+                            if (_players[ctx.RemotePeer.Id].life <= 0)
+                            {
+                                _players[ctx.RemotePeer.Id].life = 3;
+                                _players[ctx.RemotePeer.Id].score = 0;
+                            }
+                            ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(2); writer.Write(_players[ctx.RemotePeer.Id].life); });
+                            _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
+                            _balls.TryRemove(ball.id, out temp);
+                            touched = true;
+                            break;
+                        }
                     }
                 }
                 if (touched == false)
@@ -179,6 +196,7 @@ namespace Pop_The_Balls
                         writer.Write(newBall.y);
                         writer.Write(newBall.vx);
                         writer.Write(newBall.vy);
+                        writer.Write(_env.Clock);
                     }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                     _balls.TryAdd(_ids, newBall);
                     _ids++;
