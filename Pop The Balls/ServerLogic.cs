@@ -115,7 +115,9 @@ namespace Pop_The_Balls
                 float y = reader.ReadSingle();
                 long timestamp = reader.ReadInt32();
 
-                foreach(Ball ball in _balls.Values)
+                ICollection<Ball> ballList = _balls.Values;
+                ballList.Reverse();
+                foreach(Ball ball in ballList)
                 {
                     Ball temp;
                     if (ball.IsClicked(x, y, timestamp, _scene))
