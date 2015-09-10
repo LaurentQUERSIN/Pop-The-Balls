@@ -54,7 +54,7 @@ namespace Pop_The_Balls
             x = (float) (tx) * 13f;
             y = (float) (ty) * 13f;
 
-            RandomRingPosition(ref x, ref y, rand);
+            RandomRingPosition(ref tx, ref ty, rand);
 
             vx = (float)(tx * 3f) - x;
             vy = (float)(ty * 3f) - y;
