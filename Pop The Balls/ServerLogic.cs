@@ -126,23 +126,21 @@ namespace Pop_The_Balls
                             ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1); });
                             _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
                             _balls.TryRemove(ball.id, out temp);
-                            touched = true;
-                            break;
                         }
                         else
                         {
                             _players[ctx.RemotePeer.Id].life--;
+                            ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(2); writer.Write(_players[ctx.RemotePeer.Id].life); });
+                            _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
+                            _balls.TryRemove(ball.id, out temp);
                             if (_players[ctx.RemotePeer.Id].life <= 0)
                             {
                                 _players[ctx.RemotePeer.Id].life = 3;
                                 _players[ctx.RemotePeer.Id].score = 0;
                             }
-                            ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(2); writer.Write(_players[ctx.RemotePeer.Id].life); });
-                            _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
-                            _balls.TryRemove(ball.id, out temp);
-                            touched = true;
-                            break;
                         }
+                        touched = true;
+                        break;
                     }
                 }
                 if (touched == false)
