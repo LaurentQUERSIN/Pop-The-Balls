@@ -32,6 +32,7 @@ namespace Pop_The_Balls
 
         private ConcurrentDictionary<long, Player> _players = new ConcurrentDictionary<long, Player>();
         private ConcurrentDictionary<int, Ball> _balls = new ConcurrentDictionary<int, Ball>();
+        private Random _rand = new Random();
 
         public main(ISceneHost scene)
         {
@@ -164,7 +165,7 @@ namespace Pop_The_Balls
                 if (lastUpdate + 100 < _env.Clock)
                 {
                     lastUpdate = _env.Clock;
-                    Ball newBall = new Ball(_ids, _env.Clock);
+                    Ball newBall = new Ball(_ids, _env.Clock, _rand);
                     _scene.Broadcast("create_ball", s =>
                     {
                         var writer = new BinaryWriter(s, Encoding.UTF8, false);

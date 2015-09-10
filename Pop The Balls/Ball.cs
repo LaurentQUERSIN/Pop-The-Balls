@@ -32,9 +32,8 @@ namespace Pop_The_Balls
             return (false);
         }
 
-        public Ball(int nid, long time)
+        public Ball(int nid, long time, Random rand)
         {
-            Random rand = new Random();
             double tx;
             double ty;
             double length;
@@ -43,11 +42,11 @@ namespace Pop_The_Balls
             ty = rand.NextDouble() - 0.5f;
             length = Math.Sqrt((tx * tx) + (ty * ty));
 
-            x = (float) (tx / length) * 10;
-            y = (float)(ty / length) * 10;
+            x = (float) (tx / length) * 13;
+            y = (float)(ty / length) * 13;
 
-            vx = (float)-tx;
-            vy = (float)-ty;
+            vx = -x;
+            vy = -y;
 
             id = nid;
             creationTime = time;
