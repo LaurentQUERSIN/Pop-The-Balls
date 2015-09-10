@@ -21,8 +21,8 @@ namespace Pop_The_Balls
 
         public bool IsClicked(float player_x, float player_y, long time, ISceneHost scene)
         {
-            float updated_x = x + (vx * (time - creationTime));
-            float updated_y = y + (vy * (time - creationTime));
+            float updated_x = x + (vx * (time - creationTime) / 1000);
+            float updated_y = y + (vy * (time - creationTime) / 1000);
 
             scene.GetComponent<ILogger>().Debug("main", "ball_c : " + updated_x.ToString() + " " + updated_y.ToString() + " || player : " + player_x.ToString() + " " + player_y.ToString());
             if (updated_x - 0.3f < player_x && player_x < updated_x + 0.3f && updated_y - 0.3f < player_y && player_y < updated_y + 0.3f)
