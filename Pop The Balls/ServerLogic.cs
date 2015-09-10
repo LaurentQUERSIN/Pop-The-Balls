@@ -161,7 +161,7 @@ namespace Pop_The_Balls
             
             while (_isRunning == true)
             {
-                if (lastUpdate + 3000 < _env.Clock)
+                if (lastUpdate + 100 < _env.Clock)
                 {
                     lastUpdate = _env.Clock;
                     Random rand = new Random();
