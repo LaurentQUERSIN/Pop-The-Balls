@@ -32,14 +32,25 @@ namespace Pop_The_Balls
             return (false);
         }
 
-        public Ball(int nid, long time, float px, float py, float nvx, float nvy)
+        public Ball(int nid, long time)
         {
+            Random rand = new Random();
+            double tx;
+            double ty;
+            double length;
+
+            tx = rand.NextDouble() - 0.5f;
+            ty = rand.NextDouble() - 0.5f;
+            length = Math.Sqrt((tx * tx) + (ty * ty));
+
+            x = (float) (tx / length) * 10;
+            y = (float)(ty / length) * 10;
+
+            vx = (float)-tx;
+            vy = (float)-ty;
+
             id = nid;
             creationTime = time;
-            x = px;
-            y = py;
-            vx = nvx;
-            vy = nvy;
         }
     }
 }

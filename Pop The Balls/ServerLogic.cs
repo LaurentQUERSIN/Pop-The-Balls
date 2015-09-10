@@ -164,10 +164,7 @@ namespace Pop_The_Balls
                 if (lastUpdate + 100 < _env.Clock)
                 {
                     lastUpdate = _env.Clock;
-                    Random rand = new Random();
-                    float x = (float)((rand.NextDouble() - 0.5) * 16f);
-                    float vx = (float)((rand.NextDouble() - 0.5) * 1f);
-                    Ball newBall = new Ball(_ids, _env.Clock, x, 6f, vx , -1f);
+                    Ball newBall = new Ball(_ids, _env.Clock);
                     _scene.Broadcast("create_ball", s =>
                     {
                         var writer = new BinaryWriter(s, Encoding.UTF8, false);
@@ -182,7 +179,7 @@ namespace Pop_The_Balls
                     foreach (Ball ball in _balls.Values)
                     {
                         Ball temp;
-                        if (_env.Clock > ball.creationTime + 10000)
+                        if (_env.Clock > ball.creationTime + 20000)
                         {
                             _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                             _balls.TryRemove(ball.id, out temp);
