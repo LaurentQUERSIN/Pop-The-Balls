@@ -173,16 +173,16 @@ namespace Pop_The_Balls
                         var writer = new BinaryWriter(s, Encoding.UTF8, false);
                         writer.Write(_ids);
                         writer.Write(x);
-                        writer.Write(6f);
+                        writer.Write(newBall.y);
                         writer.Write(vx);
-                        writer.Write(-1f);
+                        writer.Write(newBall.vy);
                     }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                     _balls.TryAdd(_ids, newBall);
                     _ids++;
                     foreach (Ball ball in _balls.Values)
                     {
                         Ball temp;
-                        if (ball.creationTime + 15000 > _env.Clock)
+                        if (_env.Clock > ball.creationTime + 10000)
                         {
                             _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                             _balls.TryRemove(ball.id, out temp);
