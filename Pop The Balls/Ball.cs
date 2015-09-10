@@ -32,16 +32,21 @@ namespace Pop_The_Balls
             return (false);
         }
 
-        private void RandomRingPosition(ref double x, ref double y, Random rand)
+        private void Normalize(ref double x, ref double y)
         {
             double length;
 
-            x = rand.NextDouble() - 0.5f;
-            y = rand.NextDouble() - 0.5f;
             length = Math.Sqrt((x * x) + (y * y));
 
             x = x / length;
             y = y / length;
+        }
+
+        private void RandomRingPosition(ref double x, ref double y, Random rand)
+        {
+            x = rand.NextDouble() - 0.5f;
+            y = rand.NextDouble() - 0.5f;
+            Normalize(ref x, ref y);
         }
 
         public Ball(int nid, long time, Random rand)
@@ -56,11 +61,12 @@ namespace Pop_The_Balls
 
             RandomRingPosition(ref tx, ref ty, rand);
 
-            vx = (float)(tx * 3f) - x;
-            vy = (float)(ty * 3f) - y;
+            tx = (tx * 3f) - x;
+            ty = (ty * 3f) - y;
+            Normalize(ref tx, ref ty);
 
-            vx = -x;
-            vy = -y;
+            vx = (float) tx;
+            vy = (float) ty;
 
             id = nid;
             creationTime = time;
