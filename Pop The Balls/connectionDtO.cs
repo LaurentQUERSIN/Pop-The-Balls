@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pop_The_Balls
 {
-    class ConnectionDtO
+    public class ConnectionDtO
     {
         public string name;
         public string version;
