@@ -169,9 +169,9 @@ namespace Pop_The_Balls
                     {
                         var writer = new BinaryWriter(s, Encoding.UTF8, false);
                         writer.Write(_ids);
-                        writer.Write(x);
+                        writer.Write(newBall.x);
                         writer.Write(newBall.y);
-                        writer.Write(vx);
+                        writer.Write(newBall.vx);
                         writer.Write(newBall.vy);
                     }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                     _balls.TryAdd(_ids, newBall);
