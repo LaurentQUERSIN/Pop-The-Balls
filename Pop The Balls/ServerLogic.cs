@@ -34,7 +34,7 @@ namespace Pop_The_Balls
         private ConcurrentDictionary<int, Ball> _balls = new ConcurrentDictionary<int, Ball>();
         private Random _rand = new Random();
 
-        private string version = "a0.3";
+        private string version = "a0.3.1";
 
         public main(ISceneHost scene)
         {
@@ -225,7 +225,7 @@ namespace Pop_The_Balls
                     foreach (Ball ball in _balls.Values)
                     {
                         Ball temp;
-                        if (_env.Clock > ball.creationTime + 20000)
+                        if (_env.Clock > ball.creationTime + 30000)
                         {
                             _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(ball.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                             _balls.TryRemove(ball.id, out temp);
