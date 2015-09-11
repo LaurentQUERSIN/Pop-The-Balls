@@ -34,7 +34,7 @@ namespace Pop_The_Balls
         private ConcurrentDictionary<int, Ball> _balls = new ConcurrentDictionary<int, Ball>();
         private Random _rand = new Random();
 
-        private string version = "a0.2";
+        private string version = "a0.3";
 
         public main(ISceneHost scene)
         {
