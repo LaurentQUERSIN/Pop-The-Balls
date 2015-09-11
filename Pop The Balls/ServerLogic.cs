@@ -144,7 +144,7 @@ namespace Pop_The_Balls
                             player.life++;
                             if (player.life > 3)
                                 player.life = 3;
-                            ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(3); writer.Write(player.life}););
+                            ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(3); writer.Write(player.life); });
                         }
                         else
                             ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1); });
