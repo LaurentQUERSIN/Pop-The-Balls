@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="app.cs" />
     <Compile Include="Ball.cs" />
+    <Compile Include="connectionDtO.cs" />
     <Compile Include="LeaderBoardDtO.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="ServerLogic.cs" />

@@ -10,6 +10,7 @@ namespace Pop_The_Balls
     {
         public string name;
         public int score = 0;
+        public int streak = 0;
         public byte life = 3;
 
         public Player(string nm)

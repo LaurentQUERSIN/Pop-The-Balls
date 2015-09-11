@@ -117,6 +117,7 @@ namespace Pop_The_Balls
                 long timestamp = reader.ReadInt32();
                 Ball hitBall = null;
                 Ball temp;
+                Player player = _players[ctx.RemotePeer.Id];
 
                 foreach (Ball ball in _balls.Values)
                 {
@@ -135,8 +136,18 @@ namespace Pop_The_Balls
                 {
                     if (hitGoodBall)
                     {
-                        _players[ctx.RemotePeer.Id].score++;
-                        ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1); });
+                       player.score++;
+                        player.streak++;
+                        if (player.streak >= 5)
+                        {
+                            player.streak = 0;
+                            player.life++;
+                            if (player.life > 3)
+                                player.life = 3;
+                            ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(3); writer.Write(player.life}););
+                        }
+                        else
+                            ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1); });
                         _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(hitBall.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
                         _balls.TryRemove(hitBall.id, out temp);
                     }
