@@ -153,7 +153,8 @@ namespace Pop_The_Balls
                     }
                     else
                     {
-                        _players[ctx.RemotePeer.Id].life--;
+                        player.streak = 0;
+                        player.life--;
                         ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(2); writer.Write(_players[ctx.RemotePeer.Id].life); });
                         _scene.Broadcast("destroy_ball", s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(hitBall.id); }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_SEQUENCED);
                         _balls.TryRemove(hitBall.id, out temp);
