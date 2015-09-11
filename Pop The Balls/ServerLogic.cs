@@ -218,6 +218,8 @@ namespace Pop_The_Balls
                         writer.Write(_env.Clock);
                         writer.Write(newBall.oscillationTime);
                     }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
+                    //BallDtO data = new BallDtO(newBall);
+                    //_scene.Broadcast("create_ball", ballDtO, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                     _balls.TryAdd(_ids, newBall);
                     _ids++;
                     foreach (Ball ball in _balls.Values)
