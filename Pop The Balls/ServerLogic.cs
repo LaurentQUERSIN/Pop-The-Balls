@@ -51,6 +51,8 @@ namespace Pop_The_Balls
             _scene.AddProcedure("click", onClick);
             _scene.AddProcedure("update_leaderBoard", onUpdateLeaderBoard);
 
+            _scene.AddRoute("exit", onExit);
+
             _scene.Starting.Add(onStarting);
             _scene.Shuttingdown.Add(onShutdown);
 
@@ -218,6 +220,16 @@ namespace Pop_The_Balls
             if (_players.ContainsKey(ctx.RemotePeer.Id))
                 board.localNbr = _players[ctx.RemotePeer.Id].score.ToString();
             ctx.SendValue(board);
+            return Task.FromResult(true);
+        }
+
+        private Task onExit(Packet<IScenePeerClient> packet)
+        {
+            if(_players.ContainsKey(packet.Connection.Id))
+            {
+                Player temp;
+                _players.TryRemove(packet.Connection.Id, out temp);
+            }
             return Task.FromResult(true);
         }
 
