@@ -223,14 +223,13 @@ namespace Pop_The_Balls
             return Task.FromResult(true);
         }
 
-        private Task onExit(Packet<IScenePeerClient> packet)
+        private void onExit(Packet<IScenePeerClient> packet)
         {
             if(_players.ContainsKey(packet.Connection.Id))
             {
                 Player temp;
                 _players.TryRemove(packet.Connection.Id, out temp);
             }
-            return Task.FromResult(true);
         }
 
         private async Task runLogic()
