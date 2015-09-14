@@ -35,7 +35,7 @@ namespace Pop_The_Balls
         private ConcurrentDictionary<int, Ball> _balls = new ConcurrentDictionary<int, Ball>();
         private Random _rand = new Random();
 
-        private string version = "a0.3.1";
+        private string version = "a0.3.2";
 
         public main(ISceneHost scene)
         {
@@ -105,10 +105,11 @@ namespace Pop_The_Balls
         private Task onPlay(RequestContext<IScenePeerClient> ctx)
         {
             bool nameAlreadyTaken = false;
-            string name = ctx.ReadObject<ConnectionDtO>().name;
+            string name = ctx.ReadObject<ConnectionDtO>().name.ToLower() ;
             foreach (Player p in _players.Values)
             {
-                if (p.name == name)
+                string temp = p.name.ToLower();
+                if (temp == name)
                 {
                     nameAlreadyTaken = true;
                     break;
@@ -214,7 +215,8 @@ namespace Pop_The_Balls
                 board.scores[i] = "";
                 i++;
             }
-            board.localNbr = _players[ctx.RemotePeer.Id].score.ToString();
+            if (_players.ContainsKey(ctx.RemotePeer.Id))
+                board.localNbr = _players[ctx.RemotePeer.Id].score.ToString();
             ctx.SendValue(board);
             return Task.FromResult(true);
         }
