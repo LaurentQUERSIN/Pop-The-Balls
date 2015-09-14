@@ -121,10 +121,10 @@ namespace Pop_The_Balls
                 Player player = new Player(name);
                 _scene.GetComponent<ILogger>().Debug("main", "client connected with name : " + player.name);
                 _players.TryAdd(ctx.RemotePeer.Id, player);
-                ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(0); });
+                ctx.SendValue(0);
             }
             else
-                ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1); });
+                ctx.SendValue(1);
             return Task.FromResult(true);
         }
 
