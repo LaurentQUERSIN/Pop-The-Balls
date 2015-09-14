@@ -29,6 +29,7 @@ namespace Pop_The_Balls
         private IEnvironment _env;
         private bool _isRunning = false;
         private int _ids = 0;
+        private int playersConnected = 0;
 
         private ConcurrentDictionary<long, Player> _players = new ConcurrentDictionary<long, Player>();
         private ConcurrentDictionary<int, Ball> _balls = new ConcurrentDictionary<int, Ball>();
@@ -46,6 +47,7 @@ namespace Pop_The_Balls
             _scene.Connected.Add(onConnected);
             _scene.Disconnected.Add(onDisconnected);
 
+            _scene.AddProcedure("play", onPlay);
             _scene.AddProcedure("click", onClick);
             _scene.AddProcedure("update_leaderBoard", onUpdateLeaderBoard);
 
@@ -75,7 +77,7 @@ namespace Pop_The_Balls
             ConnectionDtO player_dto = client.GetUserData<ConnectionDtO>();
             if (_isRunning == false)
                 throw new ClientException("le serveur est vérouillé.");
-            else if (_players.Count >= 100)
+            else if (playersConnected >= 100)
                 throw new ClientException("le serveur est complet.");
             else if (player_dto.version != version)
                 throw new ClientException("mauvaise version");
@@ -84,13 +86,7 @@ namespace Pop_The_Balls
 
         private Task onConnected(IScenePeerClient client)
         {
-            _scene.GetComponent<ILogger>().Debug("main", "new client connecting");
-            Player player = new Player(client.GetUserData<ConnectionDtO>().name);
-            if (_players.Count < 100)
-            {
-                _scene.GetComponent<ILogger>().Debug("main", "client connected with name : " + player.name);
-                _players.TryAdd(client.Id, player);
-            }
+            playersConnected++;
             return Task.FromResult(true);
         }
 
@@ -98,10 +94,36 @@ namespace Pop_The_Balls
         {
             if (_players.ContainsKey(arg.Peer.Id))
             {
+                playersConnected--;
                 Player temp;
                 _scene.GetComponent<ILogger>().Debug("main", _players[arg.Peer.Id] + " s'est déconnecté (" + arg.Reason + ")");
                 _players.TryRemove(arg.Peer.Id, out temp);
             }
+            return Task.FromResult(true);
+        }
+
+        private Task onPlay(RequestContext<IScenePeerClient> ctx)
+        {
+            bool nameAlreadyTaken = false;
+            string name = ctx.ReadObject<ConnectionDtO>().name;
+            foreach (Player p in _players.Values)
+            {
+                if (p.name == name)
+                {
+                    nameAlreadyTaken = true;
+                    break;
+                }
+
+            }
+            if (nameAlreadyTaken == false)
+            {
+                Player player = new Player(name);
+                _scene.GetComponent<ILogger>().Debug("main", "client connected with name : " + player.name);
+                _players.TryAdd(ctx.RemotePeer.Id, player);
+                ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(0); });
+            }
+            else
+                ctx.SendValue(s => { var writer = new BinaryWriter(s, Encoding.UTF8, false); writer.Write(1); });
             return Task.FromResult(true);
         }
 
@@ -138,6 +160,8 @@ namespace Pop_The_Balls
                     {
                        player.score++;
                         player.streak++;
+                        if (player.score > player.record)
+                            player.record = player.score;
                         if (player.streak >= 5)
                         {
                             player.streak = 0;
@@ -174,14 +198,14 @@ namespace Pop_The_Balls
         private Task onUpdateLeaderBoard(RequestContext<IScenePeerClient> ctx)
         {
             List<Player> playerList = _players.Values.ToList();
-            playerList.OrderBy(x => x.score);
+            playerList.OrderByDescending(x => x.record);
             LeaderBoardDtO board = new LeaderBoardDtO();
 
             int i = 0;
             while (i < playerList.Count && i < 5)
             {
                 board.names[i] = playerList[i].name;
-                board.scores[i] = playerList[i].score.ToString();
+                board.scores[i] = playerList[i].record.ToString();
                 i++;
             }
             while (i < 5)

@@ -28,7 +28,6 @@ namespace Pop_The_Balls
             float updated_x = x + (vx * (time - creationTime) / 1000);
             float updated_y = y + (vy * (time - creationTime) / 1000);
 
-            //scene.GetComponent<ILogger>().Debug("main", "ball_c : " + updated_x.ToString() + " " + updated_y.ToString() + " || player : " + player_x.ToString() + " " + player_y.ToString());
             if (updated_x - dist < player_x && player_x < updated_x + dist && updated_y - dist < player_y && player_y < updated_y + dist)
                 return (true);
             return (false);
