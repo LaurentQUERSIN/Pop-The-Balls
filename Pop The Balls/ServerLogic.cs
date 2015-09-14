@@ -50,6 +50,7 @@ namespace Pop_The_Balls
             _scene.AddProcedure("play", onPlay);
             _scene.AddProcedure("click", onClick);
             _scene.AddProcedure("update_leaderBoard", onUpdateLeaderBoard);
+           // _scene.AddProcedure("focus_lost", onFocusLost);
 
             _scene.AddRoute("exit", onExit);
 
@@ -223,6 +224,28 @@ namespace Pop_The_Balls
             return Task.FromResult(true);
         }
 
+        //private Task onFocusLost(RequestContext<IScenePeerClient> ctx)
+        //{
+        //    Stream s = new MemoryStream();
+        //    var writer = new BinaryWriter(s, Encoding.UTF8, false);
+        //    foreach (Ball b in _balls.Values)
+        //    {
+        //        float updated_x = b.x + (b.vx * (_env.Clock - b.creationTime) / 1000);
+        //        float updated_y = b.y + (b.vy * (_env.Clock - b.creationTime) / 1000);
+
+        //        writer.Write(_ids);
+        //        writer.Write(b.x);
+        //        writer.Write(b.y);
+        //        writer.Write(b.vx);
+        //        writer.Write(b.vy);
+        //        writer.Write(b.creationTime);
+        //        writer.Write(b.oscillationTime);
+        //    }
+
+        //    ctx.SendValue(s);
+        //    return Task.FromResult(true);
+        //}
+
         private void onExit(Packet<IScenePeerClient> packet)
         {
             if(_players.ContainsKey(packet.Connection.Id))
@@ -252,7 +275,7 @@ namespace Pop_The_Balls
                         writer.Write(newBall.y);
                         writer.Write(newBall.vx);
                         writer.Write(newBall.vy);
-                        writer.Write(_env.Clock);
+                        writer.Write(newBall.creationTime);
                         writer.Write(newBall.oscillationTime);
                     }, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE);
                     //BallDtO data = new BallDtO(newBall);
