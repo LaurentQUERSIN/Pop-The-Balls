@@ -12,7 +12,8 @@ namespace Pop_The_Balls
     {
         public void Run(IAppBuilder builder)
         {
-            builder.AddGameScene();
+            builder.SceneTemplate("main", scene => new Main(scene));
         }
+
     }
 }
